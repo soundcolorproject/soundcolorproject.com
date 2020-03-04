@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Sound Color Project</title>
+</head>
+
+<body>
+
+<div>
+    <div id="details-view">
+        <h1>SoundColor</h1>
+        </br>
+        <p>Select a color pattern:</p>
+        <button id="chromesthesia-button" class="pattern-button" aria-label="Chromesthesia">Chromesthesia</button><button id="chakras-button" class="pattern-button" aria-label="Chakras">Chakras</button><button id="chromotherapy-button" class="pattern-button" aria-label="Chromotherapy">Chromotherapy</button><button id="emotion-button" class="pattern-button" aria-label="Emotion">Emotion</button><button id="adolescence-button" class="pattern-button" aria-label="Adolescence">Adolescence</button><button id="custom-button" class="pattern-button" aria-label="Custom">Custom</button>
+
+        <div id="custom-colors">
+            <button aria-label="custom color for note A" id="custom-a">A</button><button aria-label="custom color for note A Sharp" id="custom-a#">A#</button><button aria-label="custom color for note B" id="custom-b">B</button><button aria-label="custom color for note C" id="custom-c">C</button><button aria-label="custom color for note C Sharp" id="custom-c#">C#</button><button aria-label="custom color for note D" id="custom-d">D</button><button aria-label="custom color for note D Sharp" id="custom-d#">D#</button><button aria-label="custom color for note E" id="custom-e">E</button><button aria-label="custom color for note F" id="custom-f">F</button><button aria-label="custom color for note F Sharp" id="custom-f#">F#</button><button aria-label="custom color for note G" id="custom-g">G</button><button aria-label="custom color for note G Sharp" id="custom-g#">G#</button>
+        </div>
+
+        </br></br>
+        <label>
+            <input type="checkbox">Monochromatic</input>
+        </label>
+
+        <div id="noise-details">
+            </br></br>
+            <p>dB: <span id="db">0</span></p>
+            <p>Frequency: <span id="freq">•</span></p>
+            <p>Note: <span id="note">•</span></p>
+            <p>Cents ♭: <span id="cents">•</span></p>
+        </div>
+
+        <div id="shortcuts">
+            </br>
+            <h5 style="text-align: left;">Keyboard shortcuts:</h5>
+            <ul>
+                <li><span>'space'</span> = show/hide details</li>
+                <li><span>'esc'</span> = stop color system</li>
+            </ul>
+        </div>
+
+        <div id="info">
+            <a aria-label="About Sound Color Project" href="/info.html">Info</a>
+        </div>
+
+    </div>
+</div>
+
+</body>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://code.jquery.com/ui/jquery-ui-git.js"></script>
+<script>
+    window.onload = function() {
+        bindKeys();
+    }
+    function bindKeys() {
+        $('body').keydown(function(e) {
+            switch(e.which) {
+                case 27: // escape
+                    if ($("#start-screen:hidden").length == 1) {
+                        tuner.start();
+                    }
+                    toggleDisplay();
+                break;
+                case 32: // space
+                    ($("#details-view:hidden").hide().length == 1) ? $("#details-view").show() : $("#details-view").hide();
+                break;
+            }
+        });
+    }
+</script>
+
+</html>
