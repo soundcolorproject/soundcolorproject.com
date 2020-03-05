@@ -4,15 +4,16 @@
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css"/>
     <link rel="stylesheet" href="css/styles.css">
     <title>Sound Color Project</title>
 </head>
 
 <body>
 
-<div>
-    <div id="details-view">
+<div id="root">
+    Loading...
+    <!-- <div id="details-view">
         <h1>SoundColor</h1>
         </br>
         <p>Select a color pattern:</p>
@@ -49,32 +50,10 @@
             <a aria-label="About Sound Color Project" href="/info.html">Info</a>
         </div>
 
-    </div>
+    </div> -->
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+<script type="module" src="/js/index.js"></script>
 </body>
-
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="https://code.jquery.com/ui/jquery-ui-git.js"></script>
-<script>
-    window.onload = function() {
-        bindKeys();
-    }
-    function bindKeys() {
-        $('body').keydown(function(e) {
-            switch(e.which) {
-                case 27: // escape
-                    if ($("#start-screen:hidden").length == 1) {
-                        tuner.start();
-                    }
-                    toggleDisplay();
-                break;
-                case 32: // space
-                    ($("#details-view:hidden").hide().length == 1) ? $("#details-view").show() : $("#details-view").hide();
-                break;
-            }
-        });
-    }
-</script>
 
 </html>
