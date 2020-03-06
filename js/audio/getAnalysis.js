@@ -5,14 +5,14 @@ import { getFft, fftSize } from './analyzer.js'
 import { getNoteInformation } from './getNoteInformation.js'
 
 export const MIN_FOR_STATS = -100
-const MAX_TONES = 4
-const MAX_STRENGTHS = MAX_TONES * 2
+const MAX_TONES = 3
+const MAX_STRENGTHS = MAX_TONES * 3
 
 function getStats(fft) {
-  const meanStats = fft.reduce((val, curr) => {
-    if (curr > MIN_FOR_STATS) {
+  const meanStats = fft.reduce((val, curr, idx) => {
+    if (curr > 0) {
       val.total += curr
-      val.count++
+      val.count += 1
     }
     return val
   }, { total: 0, count: 0 })
@@ -20,14 +20,15 @@ function getStats(fft) {
     return {
       mean: 0,
       deviation: 0,
+      counted: 0,
     }
   }
   const mean = meanStats.total / meanStats.count
 
-  const varianceStats = fft.reduce((val, curr) => {
-    if (curr > MIN_FOR_STATS) {
-      val.total += (curr - mean)
-      val.count++
+  const varianceStats = fft.reduce((val, curr, idx) => {
+    if (curr > 0) {
+      val.total += curr * curr
+      val.count += 1
     }
     return val
   }, { total: 0, count: 0 })
@@ -36,6 +37,7 @@ function getStats(fft) {
   return {
     mean: mean,
     deviation: deviation,
+    counted: meanStats.count,
   }
 }
 
@@ -79,29 +81,38 @@ function getStrongestValues(fft, minToCount) {
 
 function getTones(strengths) {
   let tones = strengths.map(({ value, idx }) => {
-    const frequency = idx * (sampleRate / 2) / fftSize
+    const frequency = idx * (sampleRate) / fftSize
 
     return {
       dB: value,
       frequency: frequency,
+      harmonics: 1,
       note: getNoteInformation(frequency)
     }
   })
 
-  tones = tones.filter(({ value, frequency, note: { note } }, ownIdx) => (
-    !tones.slice(0, ownIdx).some((data) => (
-      data.note.note === note
-    ))
+  tones = tones.filter(({ dB, note: { note } }, ownIdx) => (
+    !tones.slice(0, ownIdx).some((data) => {
+      if (data.note.note === note) {
+        data.harmonics++
+        data.dB += (dB / (data.harmonics ** 3))
+        return true
+      } else {
+        return false
+      }
+    })
   ))
 
   return tones.slice(0, MAX_TONES)
 }
 
 export function getAnalysis() {
-  const fft = getFft()
-  const { mean, deviation } = getStats(fft)
-  const noise = (mean - MIN_FOR_STATS) / -MIN_FOR_STATS
-  const tones = getTones(getStrongestValues(fft, mean + deviation))
+  const fft = getFft().map(value => value - MIN_FOR_STATS)
+  const { mean, deviation, counted } = getStats(fft)
+  const strongest = getStrongestValues(fft, mean + deviation)
+  const tonalValues = strongest.reduce((total, { value }) => total + value, 0) / counted
+  const noise = mean - tonalValues
+  const tones = getTones(strongest)
 
   return {
     noise: noise,

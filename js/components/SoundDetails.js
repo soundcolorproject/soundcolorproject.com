@@ -18,14 +18,15 @@ export const SoundDetails = injectAndObserve(
           <h2>Pless enter again to resume the color pattern</h2>
         `
       }
-      const noiseDB = MIN_FOR_STATS + (noise * -MIN_FOR_STATS)
 
       return html`
         <div id="sound-details">
-          <div class="detail">
-            <span class="name">Noise level </span>
-            <span class="value">${noiseDB.toFixed(0)} dB</span>
-          </div>
+          ${noise !== 0 && html`
+            <div class="detail">
+              <span class="name">Noise level </span>
+              <span class="value">${noise.toFixed(0)} dB</span>
+            </div>
+          `}
           ${
             tones.map(({ dB, frequency, note: { note, cents, octave } }, idx) => {
               return html`

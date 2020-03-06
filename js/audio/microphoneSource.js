@@ -6,7 +6,13 @@ let source
 
 export async function getUserMedia() {
   if (!media) {
-    media = navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+    media = navigator.mediaDevices.getUserMedia({
+      audio: {
+        echoCancellation: false,
+        autoGainControl: false,
+        noiseSuppression: false,
+      }
+    })
   }
   return media
 }

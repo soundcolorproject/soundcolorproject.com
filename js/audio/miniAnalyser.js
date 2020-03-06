@@ -1,17 +1,16 @@
 
-import { context, resumePromise } from './context.js'
-import { getMicrophoneSource } from './microphoneSource.js'
+import { context } from './context.js'
+import { getAnalyser } from './analyzer.js'
 
-export const fftSize = 32768 // maximum size allowed
+export const fftSize = 32
 let analyser
 let fftArray
 let analyserPromise
 
-export async function getAnalyser() {
+export async function getMiniAnalyser() {
   if (!analyserPromise) {
     analyserPromise = (async () => {
-      const source = await getMicrophoneSource()
-      await resumePromise
+      const source = await getAnalyser()
 
       analyser = context.createAnalyser()
       analyser.fftSize = fftSize
@@ -26,7 +25,7 @@ export async function getAnalyser() {
   return analyserPromise
 }
 
-export function getFft() {
+export function getMiniFft() {
   if (!analyser) {
     return []
   }
@@ -35,4 +34,4 @@ export function getFft() {
   return fftArray
 }
 
-getAnalyser()
+getMiniAnalyser()

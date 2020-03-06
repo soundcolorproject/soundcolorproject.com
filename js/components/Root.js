@@ -7,6 +7,8 @@ import { ColorRenderer } from './ColorRenderer.js'
 import { SoundDetails } from './SoundDetails.js'
 import { TextHider } from './TextHider.js'
 import { Shortcuts } from './Shortcuts.js'
+import { Footer } from './Footer.js'
+import { MiniAnalyser } from './MiniAnalyser.js'
 
 export const Root = injectAndObserve(
   ({ media }) => ({ media }),
@@ -20,7 +22,18 @@ export const Root = injectAndObserve(
               <h1>SoundColor</h1>
               <${PatternPicker}/>
               <${SoundDetails}/>
-              <${Shortcuts}/>
+              <${Footer}>
+                <div id="shortcuts">
+                  <h2>
+                    Keyboard shortcuts
+                  </h2>
+                  <ul>
+                    <li><span>'space'</span> = show/hide details</li>
+                    <li><span>'enter'</span> = stop/start color pattern</li>
+                  </ul>
+                </div>
+                <${MiniAnalyser}/>
+              </${Footer}>
               <div id="info">
                 <a aria-label="About Sound Color Project" href="/info.html">Info</a>
               </div>

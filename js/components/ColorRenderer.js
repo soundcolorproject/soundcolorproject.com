@@ -5,12 +5,14 @@ import { injectAndObserve } from '../state/injectAndObserve.js'
 import { hsvToHex } from '../color/colorHelpers.js'
 
 const BASE = 1.1
-const MULT = 8
+const MULT = 12
+const levelOld = (value) => Math.pow(BASE, value) * MULT
+const level = (value) => (value) / 100
+const levelNoise = (value) => (value) / 60
 function getColorsFromAnalysis(colorMap, { noise, tones }) {
-  const saturationMult = Math.max(0, Math.min(1 - noise, 1))
+  const saturationMult = Math.max(0, Math.min(1 - levelNoise(noise), 1))
   return tones.map(({ dB, note: { note } }) => {
-    const valueRaw = Math.pow(BASE, dB) * MULT
-    const valueMult = Math.max(0, Math.min(valueRaw, 1))
+    const valueMult = Math.max(0, Math.min(level(dB), 1))
     const { h, s, v } = colorMap[note]
 
     return hsvToHex({
