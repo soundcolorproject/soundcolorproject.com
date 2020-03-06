@@ -1,45 +1,40 @@
 
 import { Component } from 'https://unpkg.com/preact?module'
-import { getFft } from '../audio/analyzer'
+import { html } from '../html.js'
 import { injectAndObserve } from '../state/injectAndObserve.js'
-import { context } from '../audio/context.js'
-import { ColorPicker } from './ColorPicker.js'
+import { hsvToHex } from '../color/colorHelpers.js'
+
+function getColorsFromAnalysis(colorMap, { noise, tones }) {
+  const saturationMult = Math.max(0, Math.min(1 - noise, 1))
+  return tones.map(({ dB, note: { note } }) => {
+    const valueMult = Math.max(0, Math.min((100 + dB) / 100, 1))
+    const { h, s, v } = colorMap[note]
+
+    return hsvToHex({
+      h,
+      s: s * saturationMult,
+      v: v * valueMult,
+    })
+  })
+}
 
 export const ColorRenderer = injectAndObserve(
-  ({ patterns }) => ({ patterns }),
+  ({ analysis, patterns }) => ({ analysis, patterns }),
   class ColorRenderer extends Component {
-    setPattern (pattern) {
-      context.resume()
-      console.log('setPattern', pattern)
-      this.props.patterns.currentPattern = pattern
-    }
-
-    renderCustomButtons () {
-      if (this.props.patterns.currentPattern === 'custom') {
-        return html`
-          <div id="custom-colors">
-            ${
-              this.props.patterns.notes.map(note => html`
-                <${ColorPicker} note=${note} />
-              `)
-            }
-          </div>
-        `
+    render ({ analysis, patterns: { currentPattern, patternData } }) {
+      if (!currentPattern) {
+        return null
       }
-    }
+      const colorMap = patternData[currentPattern].colors
+      const colors = getColorsFromAnalysis(colorMap, analysis)
 
-    render ({ patterns }) {
-      const { currentPattern, possiblePatterns } = patterns
       return html`
-        <div>
+        <div id="background-colors">
           ${
-            possiblePatterns.map(pattern => html`
-              <button type="button" onclick="${() => this.setPattern(pattern)}" class="${pattern === currentPattern ? 'selected' : ''}">
-              ${pattern}
-              </button>
+            colors.map((color, idx) => html`
+              <div class="color" key=${idx} style="background: ${color}" />
             `)
           }
-          ${this.renderCustomButtons()}
         </div>
       `
     }

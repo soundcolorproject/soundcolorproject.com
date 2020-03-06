@@ -3,6 +3,7 @@ import { Component } from 'https://unpkg.com/preact?module'
 import { html } from '../html.js'
 import { injectAndObserve } from '../state/injectAndObserve.js'
 import { PatternPicker } from './PatternPicker.js'
+import { ColorRenderer } from './ColorRenderer.js'
 
 export const Root = injectAndObserve(
   ({ media }) => ({ media }),
@@ -13,6 +14,7 @@ export const Root = injectAndObserve(
           <div id="details-view">
             <h1>SoundColor</h1>
             <${PatternPicker}/>
+            <${ColorRenderer}/>
           </div>
         `
       } else if (media.error) {

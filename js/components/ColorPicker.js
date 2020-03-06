@@ -3,6 +3,7 @@ import { Component } from 'https://unpkg.com/preact?module'
 import { html } from '../html.js'
 import { injectAndObserve } from '../state/injectAndObserve.js'
 import { context } from '../audio/context.js'
+import { hexToHsv, hsvToHex } from '../color/colorHelpers.js'
 
 export const ColorPicker = injectAndObserve(
   ({ patterns }) => ({ patterns }),
@@ -20,7 +21,7 @@ export const ColorPicker = injectAndObserve(
         el: el,
         theme: 'nano',
         useAsButton: true,
-        default: customColors[note],
+        default: hsvToHex(customColors[note]),
         components: {
           palette: false,
           preview: true,
@@ -39,7 +40,7 @@ export const ColorPicker = injectAndObserve(
       })
 
       this.picker.on('save', (color, instance) => {
-        customColors[note] = color.toHEXA().toString(2)
+        customColors[note] = hexToHsv(color.toHEXA().toString())
         instance.hide()
       })
     }
@@ -55,7 +56,7 @@ export const ColorPicker = injectAndObserve(
           type="button"
           role="button"
           aria-label="custom color for note ${noteDesc}"
-          style="background: ${customColors[note]}"
+          style="background: ${hsvToHex(customColors[note])}"
         >
           ${note}
         </button>

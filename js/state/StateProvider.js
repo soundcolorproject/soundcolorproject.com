@@ -3,6 +3,7 @@ import { Provider } from 'https://unpkg.com/mobx-preact?module'
 import { Component } from 'https://unpkg.com/preact?module'
 import { html } from '../html.js'
 
+import { analysisStore } from './analysisStore.js'
 import { mediaStore } from './mediaStore.js'
 import { patternsStore } from './patternsStore.js'
 
@@ -11,6 +12,7 @@ export class StateProvider extends Component {
     console.log('props', props);
     return html`
       <${Provider}
+        analysis=${analysisStore}
         patterns=${patternsStore}
         media=${mediaStore}
       >

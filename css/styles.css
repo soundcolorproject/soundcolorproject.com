@@ -10,6 +10,23 @@ body {
     line-height: 1.5;
 }
 
+#background-colors {
+    position: fixed;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+}
+
+#background-colors > .color {
+    flex-grow: 1;
+}
+
 #details-view {
     width: calc(100vw - 64px);
     height: calc(100vh - 64px);

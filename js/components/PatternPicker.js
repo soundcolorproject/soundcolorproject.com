@@ -2,14 +2,14 @@
 import { Component } from 'https://unpkg.com/preact?module'
 import { html } from '../html.js'
 import { injectAndObserve } from '../state/injectAndObserve.js'
-import { context } from '../audio/context.js'
+import { resume } from '../audio/context.js'
 import { ColorPicker } from './ColorPicker.js'
 
 export const PatternPicker = injectAndObserve(
   ({ patterns }) => ({ patterns }),
   class PatternPicker extends Component {
     setPattern (pattern) {
-      context.resume()
+      resume()
       console.log('setPattern', pattern)
       this.props.patterns.currentPattern = pattern
     }
