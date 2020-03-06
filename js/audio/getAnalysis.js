@@ -9,8 +9,9 @@ const MAX_TONES = 3
 const MAX_STRENGTHS = MAX_TONES * 3
 
 function getStats(fft) {
-  const meanStats = fft.reduce((val, curr, idx) => {
-    if (curr > 0) {
+  const volumes = fft.map(dBtoVolume)
+  const meanStats = volumes.reduce((val, curr, idx) => {
+    if (curr > MIN_FOR_STATS) {
       val.total += curr
       val.count += 1
     }
@@ -18,25 +19,47 @@ function getStats(fft) {
   }, { total: 0, count: 0 })
   if (meanStats.count === 0) {
     return {
-      mean: 0,
-      deviation: 0,
+      dB: {
+        mean: -100,
+        deviation: 0,
+        deviance: -100,
+      },
+      volume: {
+        mean: 1 / 1024,
+        deviation: 0,
+        deviance: 1 / 1024,
+      },
       counted: 0,
     }
   }
   const mean = meanStats.total / meanStats.count
 
-  const varianceStats = fft.reduce((val, curr, idx) => {
-    if (curr > 0) {
-      val.total += curr * curr
+  const varianceStats = volumes.reduce((val, curr, idx) => {
+    if (curr > MIN_FOR_STATS) {
+      val.total += (curr - mean) ** 2
       val.count += 1
     }
     return val
   }, { total: 0, count: 0 })
   const deviation = Math.sqrt(varianceStats.total / varianceStats.count)
 
+  const deviance = mean + deviation
+
+  const meandB = volumeTodB(mean)
+  const deviancedB = volumeTodB(mean + deviation)
+  const deviationdB = Math.abs(deviancedB - meandB)
+
   return {
-    mean: mean,
-    deviation: deviation,
+    dB: {
+      mean: meandB,
+      deviation: deviationdB,
+      deviance: deviancedB,
+    },
+    volume: {
+      mean: mean,
+      deviation: deviation,
+      deviance: deviance,
+    },
     counted: meanStats.count,
   }
 }
@@ -95,7 +118,8 @@ function getTones(strengths) {
     !tones.slice(0, ownIdx).some((data) => {
       if (data.note.note === note) {
         data.harmonics++
-        data.dB += (dB / (data.harmonics ** 3))
+        const volume = dBtoVolume(data.dB) + dBtoVolume(dB)
+        data.dB = Math.log2(volume) * 10
         return true
       } else {
         return false
@@ -106,13 +130,26 @@ function getTones(strengths) {
   return tones.slice(0, MAX_TONES)
 }
 
+export function dBtoVolume(dB) {
+  return 2 ** (dB / 10)
+}
+
+export function volumeTodB(volume) {
+  if (volume <= 0) {
+    console.log('wat', volume)
+    return 0
+  }
+  return Math.log2(volume) * 10
+}
+
 export function getAnalysis() {
-  const fft = getFft().map(value => value - MIN_FOR_STATS)
-  const { mean, deviation, counted } = getStats(fft)
-  const strongest = getStrongestValues(fft, mean + deviation)
-  const tonalValues = strongest.reduce((total, { value }) => total + value, 0) / counted
-  const noise = mean - tonalValues
+  const fft = getFft() // .map(value => value - MIN_FOR_STATS)
+  const stats = getStats(fft)
+  const strongest = getStrongestValues(fft, stats.dB.deviance)
   const tones = getTones(strongest)
+  const tonalVolume = tones.reduce((total, { dB }) => total + dBtoVolume(dB), 0)
+  const noiseVolume = stats.volume.mean - (tonalVolume / stats.counted)
+  const noise = volumeTodB(noiseVolume)
 
   return {
     noise: noise,
