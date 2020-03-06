@@ -4,11 +4,9 @@ import { sampleRate } from './context.js'
 import { getFft, fftSize } from './analyzer.js'
 import { getNoteInformation } from './getNoteInformation.js'
 
-const maxFrequency = sampleRate / 2
-// const MIN_STRENGTH = 0
 const MIN_FOR_STATS = -100
-const MAX_STRENGTHS = 20
 const MAX_TONES = 4
+const MAX_STRENGTHS = MAX_TONES * 2
 
 function getStats(fft) {
   const meanStats = fft.reduce((val, curr) => {
@@ -44,7 +42,7 @@ function getStats(fft) {
 function getStrongestValues(fft, minToCount) {
   const strongest = []
   function addIfHigher(value, idx) {
-    if (value < minToCount) {
+    if (value < minToCount || idx === 0) {
       return
     }
     const obj = {
