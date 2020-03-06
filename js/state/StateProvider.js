@@ -6,6 +6,7 @@ import { html } from '../html.js'
 import { analysisStore } from './analysisStore.js'
 import { mediaStore } from './mediaStore.js'
 import { patternsStore } from './patternsStore.js'
+import { renderStateStore } from './renderStateStore.js'
 
 export class StateProvider extends Component {
   render (props) {
@@ -15,6 +16,7 @@ export class StateProvider extends Component {
         analysis=${analysisStore}
         patterns=${patternsStore}
         media=${mediaStore}
+        renderState=${renderStateStore}
       >
         ${[props.children]}
       </${Provider}>

@@ -22,10 +22,10 @@ function getColorsFromAnalysis(colorMap, { noise, tones }) {
 }
 
 export const ColorRenderer = injectAndObserve(
-  ({ analysis, patterns }) => ({ analysis, patterns }),
+  ({ analysis, patterns, renderState }) => ({ analysis, patterns, renderState }),
   class ColorRenderer extends Component {
-    render ({ analysis, patterns: { currentPattern, patternData } }) {
-      if (!currentPattern) {
+    render ({ analysis, patterns: { currentPattern, patternData }, renderState: { showColors } }) {
+      if (!showColors) {
         return null
       }
       const colorMap = patternData[currentPattern].colors

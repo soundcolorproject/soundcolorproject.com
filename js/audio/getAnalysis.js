@@ -4,7 +4,7 @@ import { sampleRate } from './context.js'
 import { getFft, fftSize } from './analyzer.js'
 import { getNoteInformation } from './getNoteInformation.js'
 
-const MIN_FOR_STATS = -100
+export const MIN_FOR_STATS = -100
 const MAX_TONES = 4
 const MAX_STRENGTHS = MAX_TONES * 2
 
@@ -100,7 +100,7 @@ function getTones(strengths) {
 export function getAnalysis() {
   const fft = getFft()
   const { mean, deviation } = getStats(fft)
-  const noise = (mean + MIN_FOR_STATS) / -MIN_FOR_STATS
+  const noise = (mean - MIN_FOR_STATS) / -MIN_FOR_STATS
   const tones = getTones(getStrongestValues(fft, mean + deviation))
 
   return {

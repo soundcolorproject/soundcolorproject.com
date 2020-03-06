@@ -4,6 +4,9 @@ import { html } from '../html.js'
 import { injectAndObserve } from '../state/injectAndObserve.js'
 import { PatternPicker } from './PatternPicker.js'
 import { ColorRenderer } from './ColorRenderer.js'
+import { SoundDetails } from './SoundDetails.js'
+import { TextHider } from './TextHider.js'
+import { Shortcuts } from './Shortcuts.js'
 
 export const Root = injectAndObserve(
   ({ media }) => ({ media }),
@@ -12,9 +15,16 @@ export const Root = injectAndObserve(
       if (media.ready) {
         return html`
           <div id="details-view">
-            <h1>SoundColor</h1>
-            <${PatternPicker}/>
             <${ColorRenderer}/>
+            <${TextHider}>
+              <h1>SoundColor</h1>
+              <${PatternPicker}/>
+              <${SoundDetails}/>
+              <${Shortcuts}/>
+              <div id="info">
+                <a aria-label="About Sound Color Project" href="/info.html">Info</a>
+              </div>
+            </${TextHider}>
           </div>
         `
       } else if (media.error) {

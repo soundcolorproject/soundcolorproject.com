@@ -1,3 +1,4 @@
+import { renderStateStore } from '../state/renderStateStore.js'
 
 export const sampleRate = 44100
 export const context = new AudioContext({
@@ -13,6 +14,7 @@ export const resumePromise = new Promise(resolve => {
 let internalResumePromise
 export function resume() {
   if (!internalResumePromise) {
+    renderStateStore.showColors = true
     internalResumePromise = context.resume().then(onResume)
   }
 

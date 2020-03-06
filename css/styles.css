@@ -10,6 +10,18 @@ body {
     line-height: 1.5;
 }
 
+#text-hider {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    transition: 0.5s opacity;
+    opacity: 1;
+}
+
+#text-hider.hidden {
+    opacity: 0;
+}
+
 #background-colors {
     position: fixed;
     z-index: -1;
@@ -33,6 +45,14 @@ body {
     margin: 32px;
     display: flex;
     flex-direction: column;
+    position: relative;
+}
+
+#shortcuts {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
 }
 
 h1 {
@@ -45,7 +65,7 @@ h1 {
     margin-bottom: 2.5em;
 }
 
-h5 {
+h2 {
     font-size: 13px;
     font-weight: 600;
 }
@@ -102,15 +122,28 @@ button:disabled, button:disabled:hover, button:disabled:active {
     background-color: #1e1c1a;
 }
 
+#sound-details {
+    margin-top: 2em;
+    display: flex;
+    flex-direction: column;
+}
+
+#sound-details .detail {
+    margin: 5px;
+}
+
+#sound-details .detail .name {
+    font-weight: 700;
+}
+
+#sound-details .detail .value {
+    font-weight: 500;
+}
+
 label, input {
     font-weight: 600;
     font-size: 11px;
     cursor: pointer;
-}
-
-#info {
-    position: absolute;
-    bottom: 48px;
 }
 
 #info-body {
