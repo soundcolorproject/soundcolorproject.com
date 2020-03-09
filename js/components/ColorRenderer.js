@@ -5,7 +5,7 @@ import { injectAndObserve } from '../state/injectAndObserve.js'
 import { hsvToHex } from '../color/colorHelpers.js'
 import { dBtoVolume } from '../audio/getAnalysis.js'
 
-const NOISE_MULT = 512
+const NOISE_MULT = 1
 const VIBRANCE_MULT = 4
 function getColorsFromAnalysis(colorMap, { noise, tones }) {
   const saturationMult = Math.max(0, Math.min(1 - (dBtoVolume(noise) * NOISE_MULT), 1))
