@@ -5,12 +5,12 @@ import { injectAndObserve } from '../state/injectAndObserve.js'
 import { hsvToHex } from '../color/colorHelpers.js'
 import { dBtoVolume } from '../audio/getAnalysis.js'
 
-const NOISE_MULT = 1
-const VIBRANCE_MULT = 4
-function getColorsFromAnalysis(colorMap, { noise, tones }) {
-  const saturationMult = Math.max(0, Math.min(1 - (dBtoVolume(noise) * NOISE_MULT), 1))
+function getColorsFromAnalysis(colorMap, { noise, tones }, { noiseMultiplier, vibranceMultiplier }) {
+  noiseMultiplier = noiseMultiplier >= 0 ? 2 ** noiseMultiplier : 0
+  vibranceMultiplier = 2 ** vibranceMultiplier
+  const saturationMult = Math.max(0, Math.min(1 - (dBtoVolume(noise) * noiseMultiplier), 1))
   return tones.map(({ dB, note: { note } }) => {
-    const valueMult = Math.max(0, Math.min(dBtoVolume(dB) * VIBRANCE_MULT, 1))
+    const valueMult = Math.max(0, Math.min(dBtoVolume(dB) * vibranceMultiplier, 1))
     const { h, s, v } = colorMap[note]
 
     return hsvToHex({
@@ -24,12 +24,13 @@ function getColorsFromAnalysis(colorMap, { noise, tones }) {
 export const ColorRenderer = injectAndObserve(
   ({ analysis, patterns, renderState }) => ({ analysis, patterns, renderState }),
   class ColorRenderer extends Component {
-    render ({ analysis, patterns: { currentPattern, patternData }, renderState: { showColors } }) {
+    render ({ analysis, patterns, renderState: { showColors } }) {
       if (!showColors) {
         return null
       }
+      const { currentPattern, patternData } = patterns
       const colorMap = patternData[currentPattern].colors
-      const colors = getColorsFromAnalysis(colorMap, analysis)
+      const colors = getColorsFromAnalysis(colorMap, analysis, patterns)
 
       return html`
         <div id="background-colors">

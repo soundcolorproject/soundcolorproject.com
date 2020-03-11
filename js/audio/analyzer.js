@@ -15,7 +15,7 @@ export async function getAnalyser() {
 
       analyser = context.createAnalyser()
       analyser.fftSize = fftSize
-      analyser.smoothingTimeConstant = 0.8
+      analyser.smoothingTimeConstant = 0.9
 
       fftArray = new Float32Array(analyser.frequencyBinCount)
 

@@ -3,6 +3,9 @@ import { observable } from 'https://unpkg.com/mobx@5.x?module'
 import { hexToHsv } from '../color/colorHelpers.js'
 
 export const patternsStore = observable({
+  noiseMultiplier: 1,
+  vibranceMultiplier: 1,
+  toneSigma: 5,
   currentPattern: '',
   patternData: {
     chakras: {
