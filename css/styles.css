@@ -24,7 +24,7 @@ body {
 
 #background-colors {
     position: fixed;
-    z-index: -1;
+    z-index: -2;
     top: 0;
     left: 0;
     bottom: 0;
@@ -67,7 +67,11 @@ body {
 }
 
 #mini-analyser {
-    border: 1px solid rgba(128, 128, 128, 0.75);
+    position: fixed;
+    z-index: -1;
+    bottom: 0;
+    left: 0;
+    right: 0;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -78,6 +82,7 @@ body {
 #mini-analyser > .bar {
     background: rgba(128, 128, 128, 0.75);
     flex-grow: 1;
+    
 }
 
 h1 {

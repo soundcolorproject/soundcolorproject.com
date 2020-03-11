@@ -2,7 +2,7 @@
 import { context } from './context.js'
 import { getAnalyser } from './analyzer.js'
 
-export const fftSize = 32
+export const fftSize = 1024
 let analyser
 let fftArray
 let analyserPromise
@@ -14,7 +14,7 @@ export async function getMiniAnalyser() {
 
       analyser = context.createAnalyser()
       analyser.fftSize = fftSize
-      analyser.smoothingTimeConstant = 0.8
+      analyser.smoothingTimeConstant = 0.9
 
       fftArray = new Float32Array(analyser.frequencyBinCount)
 
