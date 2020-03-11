@@ -3,46 +3,47 @@
 import { sampleRate } from './context.js'
 import { getFft, fftSize } from './analyzer.js'
 import { getNoteInformation } from './getNoteInformation.js'
+import { patternsStore } from '../state/patternsStore.js'
 
 export const MIN_FOR_STATS = -100
-const MAX_TONES = 3
-const MAX_STRENGTHS = MAX_TONES * 3
+const MAX_TONES = 1
+const MAX_STRENGTHS = 3
+const DEFAULT_STATS = {
+  dB: {
+    mean: -1000,
+    deviation: 0,
+  },
+  volume: {
+    mean: 1 / (2 ** 100),
+    deviation: 0,
+  },
+  counted: 0,
+}
 
 function getStats(fft) {
-  const volumes = fft.map(dBtoVolume)
-  const meanStats = volumes.reduce((val, curr, idx) => {
+  const meanStats = fft.reduce((val, curr, idx) => {
     if (curr > MIN_FOR_STATS) {
       val.total += curr
-      val.count += 1
+      val.count++
     }
     return val
   }, { total: 0, count: 0 })
   if (meanStats.count === 0) {
-    return {
-      dB: {
-        mean: -100,
-        deviation: 0,
-      },
-      volume: {
-        mean: 1 / 1024,
-        deviation: 0,
-      },
-      counted: 0,
-    }
+    return DEFAULT_STATS
   }
-  const mean = meanStats.total / meanStats.count
+  const meandB = meanStats.total / meanStats.count
 
-  const varianceStats = volumes.reduce((val, curr, idx) => {
+  const varianceStats = fft.reduce((val, curr, idx) => {
     if (curr > MIN_FOR_STATS) {
-      val.total += (curr - mean) ** 2
-      val.count += 1
+      val.total += (curr - meandB) ** 2
+      val.count++
     }
     return val
   }, { total: 0, count: 0 })
-  const deviation = Math.sqrt(varianceStats.total / varianceStats.count)
+  const deviationdB = Math.sqrt(varianceStats.total / varianceStats.count)
 
-  const meandB = volumeTodB(mean)
-  const deviationdB = Math.abs(volumeTodB(mean + deviation) - meandB)
+  const mean = dBtoVolume(meandB)
+  const deviation = dBtoVolume(deviationdB)
 
   return {
     dB: {
@@ -56,6 +57,45 @@ function getStats(fft) {
     counted: meanStats.count,
   }
 }
+
+// function getStats(fft) {
+//   const volumes = fft.map(dBtoVolume)
+//   const meanStats = volumes.reduce((val, curr, idx) => {
+//     if (curr > MIN_FOR_STATS) {
+//       val.total += curr
+//       val.count++
+//     }
+//     return val
+//   }, { total: 0, count: 0 })
+//   if (meanStats.count === 0) {
+//     return DEFAULT_STATS
+//   }
+//   const mean = meanStats.total / meanStats.count
+
+//   const varianceStats = volumes.reduce((val, curr, idx) => {
+//     if (curr > MIN_FOR_STATS) {
+//       val.total += (curr - mean) ** 2
+//       val.count**
+//     }
+//     return val
+//   }, { total: 0, count: 0 })
+//   const deviation = Math.sqrt(varianceStats.total / varianceStats.count)
+
+//   const meandB = volumeTodB(mean)
+//   const deviationdB = Math.abs(volumeTodB(mean + deviation) - meandB)
+
+//   return {
+//     dB: {
+//       mean: meandB,
+//       deviation: deviationdB,
+//     },
+//     volume: {
+//       mean: mean,
+//       deviation: deviation,
+//     },
+//     counted: meanStats.count,
+//   }
+// }
 
 function getStrongestValues(fft, minToCount) {
   const strongest = []
@@ -129,17 +169,17 @@ export function dBtoVolume(dB) {
 
 export function volumeTodB(volume) {
   if (volume <= 0) {
-    console.log('wat', volume)
-    return 0
+    return -Infinity
   }
   return Math.log2(volume) * 10
 }
 
-const SIGMA_MULT = 5
 export function getAnalysis() {
-  const fft = getFft() // .map(value => value - MIN_FOR_STATS)
+  const fft = getFft()
   const stats = getStats(fft)
-  const strongest = getStrongestValues(fft, volumeTodB(stats.volume.mean + stats.volume.deviation * SIGMA_MULT))
+  // const mindB = volumeTodB(stats.volume.mean + stats.volume.deviation * patternsStore.toneSigma)
+  const mindB = stats.dB.mean + stats.dB.deviation * patternsStore.toneSigma
+  const strongest = getStrongestValues(fft, mindB)
   const tones = getTones(strongest)
   const tonalVolume = tones.reduce((total, { dB }) => total + dBtoVolume(dB), 0)
   const noiseVolume = stats.volume.mean - (tonalVolume / stats.counted)

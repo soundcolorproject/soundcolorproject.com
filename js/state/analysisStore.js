@@ -9,7 +9,7 @@ export const analysisStore = observable({
   miniFft: [],
 })
 
-const setAnalysis = action(({ noise, tones }, miniFft) => {
+const setAnalysis = action('setAnalysis', ({ noise, tones }, miniFft) => {
   analysisStore.noise = noise
   analysisStore.tones = tones
   analysisStore.miniFft = miniFft

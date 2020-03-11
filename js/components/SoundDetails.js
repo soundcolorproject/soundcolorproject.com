@@ -21,7 +21,7 @@ export const SoundDetails = injectAndObserve(
 
       return html`
         <div id="sound-details">
-          ${noise !== 0 && html`
+          ${Number.isFinite(noise) && html`
             <div class="detail">
               <span class="name">Noise level </span>
               <span class="value">${noise.toFixed(0)} dB</span>
