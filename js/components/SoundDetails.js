@@ -10,19 +10,19 @@ export const SoundDetails = injectAndObserve(
       return html`
         <div class="detail">
           <div>
-            <span class="name">Volume </span>
+            <span class="name">dB: </span>
             <span class="value">${dB.toFixed(0)} dB</span>
           </div>
           <div>
-            <span class="name">Frequency </span>
+            <span class="name">Frequency: </span>
             <span class="value">${frequency.toFixed(2)} hz</span>
           </div>
           <div>
-            <span class="name">Note </span>
+            <span class="name">Note: </span>
             <span class="value">${note} ${octave}</span>
           </div>
           <div>
-            <span class="name">Cents </span>
+            <span class="name">Cents ♭: </span>
             <span class="value">${cents.toFixed(2)}</span>
           </div>
         </div>
