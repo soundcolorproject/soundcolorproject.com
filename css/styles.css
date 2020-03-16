@@ -37,6 +37,7 @@ body {
 
 #background-colors > .color {
     flex-grow: 1;
+    transition: 0.25s background;
 }
 
 #details-view {
@@ -72,11 +73,13 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
+    /* top: 0; */
+    height: 500px;
+    max-height: 100vh;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: flex-end;
-    height: 200px;
 }
 
 #mini-analyser > .bar {
@@ -163,11 +166,11 @@ button:disabled, button:disabled:hover, button:disabled:active {
 }
 
 #sound-details .detail .name {
-    font-weight: 700;
+    font-weight: 500;
 }
 
 #sound-details .detail .value {
-    font-weight: 500;
+    font-weight: 700;
 }
 
 label, input {
