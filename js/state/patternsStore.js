@@ -1,11 +1,14 @@
 
-import { observable } from 'https://unpkg.com/mobx@5.x?module'
+import { observable, reaction } from 'https://unpkg.com/mobx@5.x?module'
 import { hexToHsv } from '../color/colorHelpers.js'
+import { getAnalyser } from '../audio/analyzer.js'
+import { getMiniAnalyser } from '../audio/miniAnalyser.js'
 
 export const patternsStore = observable({
   noiseMultiplier: 1,
   vibranceMultiplier: 1,
-  toneSigma: 5,
+  toneSigma: 0,
+  timeSmoothing: 0.8,
   currentPattern: '',
   patternData: {
     chakras: {
@@ -113,3 +116,11 @@ export const patternsStore = observable({
   },
   notes: ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#'],
 })
+
+reaction(
+  () => patternsStore.timeSmoothing,
+  async (smoothing) => {
+    const analysers = await Promise.all([getAnalyser(), getMiniAnalyser()])
+    analysers.forEach(analyser => analyser.smoothingTimeConstant = smoothing)
+  }
+)

@@ -1,6 +1,7 @@
 
 import { context, resumePromise } from './context.js'
 import { getMicrophoneSource } from './microphoneSource.js'
+import { patternsStore } from '../state/patternsStore.js'
 
 export const fftSize = 32768 // maximum size allowed
 let analyser
@@ -15,7 +16,7 @@ export async function getAnalyser() {
 
       analyser = context.createAnalyser()
       analyser.fftSize = fftSize
-      analyser.smoothingTimeConstant = 0.9
+      analyser.smoothingTimeConstant = patternsStore.timeSmoothing
 
       fftArray = new Float32Array(analyser.frequencyBinCount)
 

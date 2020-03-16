@@ -19,7 +19,7 @@ export const Sliders = injectAndObserve(
       return this._setters[name]
     }
 
-    render ({ patterns: { noiseMultiplier, vibranceMultiplier, toneSigma } }) {
+    render ({ patterns: { noiseMultiplier, vibranceMultiplier, toneSigma, timeSmoothing } }) {
       return html`
         <div id="sliders">
           <label>
@@ -38,12 +38,20 @@ export const Sliders = injectAndObserve(
               oninput=${this.setValue('noiseMultiplier')}
             />
           </label>
-          <label>
+          <!-- <label>
             Required tone strength
             <input
               type="range" min="0" step="0.01" max="10"
               value=${toneSigma}
               oninput=${this.setValue('toneSigma')}
+            />
+          </label> -->
+          <label>
+            Time smoothing
+            <input
+              type="range" min="0" step="0.01" max="0.99"
+              value=${timeSmoothing}
+              oninput=${this.setValue('timeSmoothing')}
             />
           </label>
         </div>

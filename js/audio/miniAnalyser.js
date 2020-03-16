@@ -1,6 +1,7 @@
 
 import { context } from './context.js'
 import { getAnalyser } from './analyzer.js'
+import { patternsStore } from '../state/patternsStore.js'
 
 export const fftSize = 1024
 let analyser
@@ -14,7 +15,7 @@ export async function getMiniAnalyser() {
 
       analyser = context.createAnalyser()
       analyser.fftSize = fftSize
-      analyser.smoothingTimeConstant = 0.9
+      analyser.smoothingTimeConstant = patternsStore.timeSmoothing
 
       fftArray = new Float32Array(analyser.frequencyBinCount)
 
