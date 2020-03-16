@@ -2,11 +2,54 @@
 import { Component } from 'https://unpkg.com/preact?module'
 import { html } from '../html.js'
 import { injectAndObserve } from '../state/injectAndObserve.js'
-import { MIN_FOR_STATS } from '../audio/getAnalysis.js'
 
 export const SoundDetails = injectAndObserve(
   ({ analysis, patterns, renderState }) => ({ analysis, patterns, renderState }),
   class SoundDetails extends Component {
+    renderDetails = ({ dB, frequency, note: { note, cents, octave } }, idx) => {
+      return html`
+        <div class="detail">
+          <div>
+            <span class="name">Volume </span>
+            <span class="value">${dB.toFixed(0)} dB</span>
+          </div>
+          <div>
+            <span class="name">Frequency </span>
+            <span class="value">${frequency.toFixed(2)} hz</span>
+          </div>
+          <div>
+            <span class="name">Note </span>
+            <span class="value">${note} ${octave}</span>
+          </div>
+          <div>
+            <span class="name">Cents </span>
+            <span class="value">${cents.toFixed(2)}</span>
+          </div>
+        </div>
+      `
+    }
+
+    renderEmptyDetails = () => html`
+      <div class="detail">
+        <div>
+          <span class="name">dB </span>
+          <span class="value">•</span>
+        </div>
+        <div>
+          <span class="name">Frequency </span>
+          <span class="value">•</span>
+        </div>
+        <div>
+          <span class="name">Note </span>
+          <span class="value">•</span>
+        </div>
+        <div>
+          <span class="name">Cents </span>
+          <span class="value">•</span>
+        </div>
+      </div>
+    `
+
     render ({ analysis: { noise, tones }, patterns: { currentPattern }, renderState: { showColors } }) {
       if (!currentPattern) {
         return html`
@@ -28,25 +71,10 @@ export const SoundDetails = injectAndObserve(
             </div>
           `}
           ${
-            tones.map(({ dB, frequency, note: { note, cents, octave } }, idx) => {
-              return html`
-                <div class="detail">
-                  <span class="name">${note} ${octave}</span>
-                  <div>
-                    <span class="name">Loudness </span>
-                    <span class="value">${dB.toFixed(0)} dB</span>
-                  </div>
-                  <div>
-                    <span class="name">Cents </span>
-                    <span class="value">${cents.toFixed(2)}%</span>
-                  </div>
-                  <div>
-                    <span class="name">Frequency </span>
-                    <span class="value">${frequency.toFixed(2)} hz</span>
-                  </div>
-                </div>
-              `
-            })
+            tones.length > 0 
+              ? this.renderDetails(tones[0])
+              : this.renderEmptyDetails()
+            
           }
         </div>
       `
