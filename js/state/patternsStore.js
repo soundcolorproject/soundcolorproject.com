@@ -6,7 +6,7 @@ import { getMiniAnalyser } from '../audio/miniAnalyser.js'
 
 export const patternsStore = observable({
   noiseMultiplier: 1,
-  vibranceMultiplier: 1,
+  vibranceMultiplier: 2.5,
   toneSigma: 0,
   timeSmoothing: 0.8,
   currentPattern: '',

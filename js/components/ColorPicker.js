@@ -25,7 +25,7 @@ export const ColorPicker = injectAndObserve(
         components: {
           palette: false,
           preview: true,
-          opacity: true,
+          opacity: false,
           hue: true,
           interaction: {
             input: true,

@@ -1,5 +1,5 @@
 
-import { Component } from 'https://unpkg.com/preact?module'
+import { Component, Fragment } from 'https://unpkg.com/preact?module'
 import { html } from '../html.js'
 import { injectAndObserve } from '../state/injectAndObserve.js'
 
@@ -8,9 +8,9 @@ export const SoundDetails = injectAndObserve(
   class SoundDetails extends Component {
     renderDetails = ({ dB, frequency, note: { note, cents, octave } }, idx) => {
       return html`
-        <div class="detail">
+        <${Fragment}>
           <div>
-            <span class="name">dB: </span>
+            <span class="name">Tone volume: </span>
             <span class="value">${dB.toFixed(0)} dB</span>
           </div>
           <div>
@@ -25,12 +25,12 @@ export const SoundDetails = injectAndObserve(
             <span class="name">Cents ♭: </span>
             <span class="value">${cents.toFixed(2)}</span>
           </div>
-        </div>
+        </${Fragment}>
       `
     }
 
     renderEmptyDetails = () => html`
-      <div class="detail">
+      <${Fragment}>
         <div>
           <span class="name">dB </span>
           <span class="value">•</span>
@@ -47,7 +47,7 @@ export const SoundDetails = injectAndObserve(
           <span class="name">Cents </span>
           <span class="value">•</span>
         </div>
-      </div>
+      </${Fragment}>
     `
 
     render ({ analysis: { noise, tones }, patterns: { currentPattern }, renderState: { showColors } }) {
@@ -66,16 +66,16 @@ export const SoundDetails = injectAndObserve(
         <div id="sound-details">
           ${Number.isFinite(noise) && html`
             <div class="detail">
-              <span class="name">Noise level </span>
+              <span class="name">Noise volume: </span>
               <span class="value">${noise.toFixed(0)} dB</span>
+              ${
+                tones.length > 0 
+                  ? this.renderDetails(tones[0])
+                  : this.renderEmptyDetails()
+                
+              }
             </div>
           `}
-          ${
-            tones.length > 0 
-              ? this.renderDetails(tones[0])
-              : this.renderEmptyDetails()
-            
-          }
         </div>
       `
     }

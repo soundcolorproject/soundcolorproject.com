@@ -10,6 +10,11 @@ body {
     line-height: 1.5;
 }
 
+.pcr-app {
+    font-size: 16px;
+    width: 200px;
+}
+
 #text-hider {
     flex-grow: 1;
     display: flex;
@@ -37,7 +42,7 @@ body {
 
 #background-colors > .color {
     flex-grow: 1;
-    transition: 0.25s background;
+    /* transition: 0.25s background; */
 }
 
 #details-view {
@@ -182,6 +187,7 @@ label, input {
 #info-body {
     width: 100%;
     max-width: 344px;
+    margin: 32px
 }
 
 a {
