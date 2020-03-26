@@ -23,6 +23,14 @@ export const PatternPicker = injectAndObserve(
                 <${ColorPicker} note=${note} />
               `)
             }
+            <button
+              type="button"
+              role="button"
+              aria-label="reset custom colors"
+              onclick="${this.props.patterns.patternData.custom.colors.reset}"
+            >
+              Reset
+            </button>
           </div>
         `
       }

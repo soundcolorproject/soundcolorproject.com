@@ -4,6 +4,55 @@ import { hexToHsv } from '../color/colorHelpers.js'
 import { getAnalyser } from '../audio/analyzer.js'
 import { getMiniAnalyser } from '../audio/miniAnalyser.js'
 
+const defaultCustomColors = {
+  'C': hexToHsv('#E2CF0B'),
+  'C#': hexToHsv('#FFE50C'),
+  'D': hexToHsv('#35C80B'),
+  'D#': hexToHsv('#0B33A5'),
+  'E': hexToHsv('#19BDA2'),
+  'F': hexToHsv('#835BD9'),
+  'F#': hexToHsv('#774ACB'),
+  'G': hexToHsv('#E4C5DD'),
+  'G#': hexToHsv('#E0BFD7'),
+  'A': hexToHsv('#A30008'),
+  'A#': hexToHsv('#9B1A6F'),
+  'B': hexToHsv('#BA000A'),
+}
+
+function getCustomColorValue (name, note) {
+  const storageVal = localStorage.getItem(`custom:${name}:${note}`)
+  if (storageVal) {
+    return JSON.parse(storageVal)
+  } else {
+    return defaultCustomColors[note]
+  }
+}
+
+function saveCustommColorValue (name, note, value) {
+  localStorage.setItem(`custom:${name}:${note}`, JSON.stringify(value))
+}
+
+function getCustomColors(name = 'current') {
+  const colors = observable(Object.keys(defaultCustomColors).reduce((full, note) => ({
+    ...full,
+    [note]: getCustomColorValue(name, note),
+  }), {}))
+  const disposers = []
+  Object.keys(defaultCustomColors).forEach(note => (
+    disposers.push(reaction(
+      () => colors[note],
+      (value) => saveCustommColorValue(name, note, value),
+    ))
+  ))
+  colors.clearReactions = () => disposers.forEach(d => d())
+  colors.reset = () => {
+    Object.keys(defaultCustomColors).forEach(note => {
+      colors[note] = defaultCustomColors[note]
+    })
+  }
+  return colors
+}
+
 export const patternsStore = observable({
   noiseMultiplier: 1,
   vibranceMultiplier: 2.5,
@@ -98,20 +147,7 @@ export const patternsStore = observable({
     },
     custom: {
       label: 'Custom',
-      colors: {
-        'C': hexToHsv('#E2CF0B'),
-        'C#': hexToHsv('#FFE50C'),
-        'D': hexToHsv('#35C80B'),
-        'D#': hexToHsv('#0B33A5'),
-        'E': hexToHsv('#19BDA2'),
-        'F': hexToHsv('#835BD9'),
-        'F#': hexToHsv('#774ACB'),
-        'G': hexToHsv('#E4C5DD'),
-        'G#': hexToHsv('#E0BFD7'),
-        'A': hexToHsv('#A30008'),
-        'A#': hexToHsv('#9B1A6F'),
-        'B': hexToHsv('#BA000A'),
-      },
+      colors: getCustomColors(),
     }
   },
   notes: ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#'],
