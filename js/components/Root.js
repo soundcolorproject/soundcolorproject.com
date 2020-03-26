@@ -30,15 +30,7 @@ export const Root = injectAndObserve(
               <${SoundDetails}/>
               <${MiniAnalyser}/>
               <${Footer}>
-                <div id="shortcuts">
-                  <h2>
-                    Keyboard shortcuts
-                  </h2>
-                  <ul>
-                    <li><span>'space'</span> = show/hide details</li>
-                    <li><span>'enter'</span> = stop/start color pattern</li>
-                  </ul>
-                </div>
+                <${Shortcuts}/>
                 <${Sliders}/>
               </${Footer}>
               <div id="info">

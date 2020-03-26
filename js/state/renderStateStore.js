@@ -18,5 +18,15 @@ document.addEventListener('keydown', (ev) => {
     }
     renderStateStore.showColors = !renderStateStore.showColors
     resume()
+  } else if (ev.key === 'f') {
+    if (document.fullscreenEnabled) {
+      if (document.fullscreenElement) {
+        document.exitFullscreen()
+      } else {
+        document.body.requestFullscreen({
+          navigationUI: 'hide',
+        })
+      }
+    }
   }
 })

@@ -12,6 +12,11 @@ export class Shortcuts extends Component {
         <ul>
           <li><span>'space'</span> = show/hide details</li>
           <li><span>'enter'</span> = stop/start color pattern</li>
+          ${
+            document.fullscreenEnabled 
+              ? html`<li><span>'F'</span> = enter/leave fullscreen</li>` 
+              : ''
+          }
         </ul>
       </div>
     `
