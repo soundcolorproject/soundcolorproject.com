@@ -58,7 +58,7 @@ export const SoundDetails = injectAndObserve(
       }
       if (!showColors) {
         return html`
-          <h2>Pless enter again to resume the color pattern</h2>
+          <h2>Press enter again to resume the color pattern</h2>
         `
       }
 
