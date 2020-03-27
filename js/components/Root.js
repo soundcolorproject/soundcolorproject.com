@@ -4,6 +4,7 @@ import { html } from '../html.js'
 import { injectAndObserve } from '../state/injectAndObserve.js'
 import { PatternPicker } from './PatternPicker.js'
 import { ColorRenderer } from './ColorRenderer.js'
+import { DeviceChooser } from './DeviceChooser.js'
 import { SoundDetails } from './SoundDetails.js'
 import { TextHider } from './TextHider.js'
 import { Shortcuts } from './Shortcuts.js'
@@ -29,6 +30,8 @@ export const Root = injectAndObserve(
               </label>
               <${SoundDetails}/>
               <${MiniAnalyser}/>
+              <div id='spreader'/>
+              <${DeviceChooser}/>
               <${Footer}>
                 <${Shortcuts}/>
                 <${Sliders}/>

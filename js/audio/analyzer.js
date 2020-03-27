@@ -1,18 +1,19 @@
 
 import { context, resumePromise } from './context.js'
-import { getMicrophoneSource } from './microphoneSource.js'
+import { getAudioSource } from './microphoneSource.js'
 import { patternsStore } from '../state/patternsStore.js'
 
 export const fftSize = 32768 // maximum size allowed
 let analyser
 let fftArray
 let analyserPromise
+let prevSource
 
 export async function getAnalyser() {
   if (!analyserPromise) {
     analyserPromise = (async () => {
-      const source = await getMicrophoneSource()
-      await resumePromise
+      const source = prevSource || await getAudioSource()
+      prevSource = source
 
       analyser = context.createAnalyser()
       analyser.fftSize = fftSize
@@ -25,6 +26,17 @@ export async function getAnalyser() {
     })()
   }
   return analyserPromise
+}
+
+export function setSource(newSource) {
+  if (prevSource && analyser) {
+    prevSource.disconnect(analyser)
+  }
+  if (analyser) {
+    newSource.connect(analyser)
+  }
+
+  prevSource = newSource
 }
 
 export function getFft() {

@@ -4,6 +4,7 @@ import { getAnalyser } from './analyzer.js'
 import { patternsStore } from '../state/patternsStore.js'
 
 export const fftSize = 1024
+let prevSource
 let analyser
 let fftArray
 let analyserPromise
@@ -11,7 +12,8 @@ let analyserPromise
 export async function getMiniAnalyser() {
   if (!analyserPromise) {
     analyserPromise = (async () => {
-      const source = await getAnalyser()
+      const source = prevSource || await getAnalyser()
+      prevSource = source
 
       analyser = context.createAnalyser()
       analyser.fftSize = fftSize
@@ -24,6 +26,17 @@ export async function getMiniAnalyser() {
     })()
   }
   return analyserPromise
+}
+
+export function setSource(newSource) {
+  if (prevSource && analyser) {
+    prevSource.disconnect(analyser)
+  }
+  if (analyser) {
+    newSource.connect(analyser)
+  }
+  
+  prevSource = newSource
 }
 
 export function getMiniFft() {
