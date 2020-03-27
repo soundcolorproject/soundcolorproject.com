@@ -32,19 +32,19 @@ export const SoundDetails = injectAndObserve(
     renderEmptyDetails = () => html`
       <${Fragment}>
         <div>
-          <span class="name">dB </span>
+          <span class="name">Tone volume: </span>
           <span class="value">•</span>
         </div>
         <div>
-          <span class="name">Frequency </span>
+          <span class="name">Frequency: </span>
           <span class="value">•</span>
         </div>
         <div>
-          <span class="name">Note </span>
+          <span class="name">Note: </span>
           <span class="value">•</span>
         </div>
         <div>
-          <span class="name">Cents </span>
+          <span class="name">Cents ♭: </span>
           <span class="value">•</span>
         </div>
       </${Fragment}>
@@ -64,18 +64,28 @@ export const SoundDetails = injectAndObserve(
 
       return html`
         <div id="sound-details">
-          ${Number.isFinite(noise) && html`
-            <div class="detail">
-              <span class="name">Noise volume: </span>
-              <span class="value">${noise.toFixed(0)} dB</span>
-              ${
-                tones.length > 0 
-                  ? this.renderDetails(tones[0])
-                  : this.renderEmptyDetails()
-                
-              }
-            </div>
-          `}
+          ${
+            Number.isFinite(noise)
+              ? html`
+                <div class="detail">
+                  <span class="name">Noise volume: </span>
+                  <span class="value">${noise.toFixed(0)} dB</span>
+                  ${
+                    tones.length > 0 
+                      ? this.renderDetails(tones[0])
+                      : this.renderEmptyDetails()
+                    
+                  }
+                </div>
+              `
+            : html`
+                <div class="detail">
+                  <span class="name">Noise volume: </span>
+                  <span class="value">•</span>
+                  ${this.renderEmptyDetails()}
+                </div>
+            `
+          }
         </div>
       `
     }
