@@ -43,7 +43,7 @@ export const PatternPicker = injectAndObserve(
         <div>
           ${
             possiblePatterns.map(pattern => html`
-              <button type="button" onclick="${() => this.setPattern(pattern)}" class="${pattern === currentPattern ? 'selected' : ''}">
+              <button type="button" onclick="${() => this.setPattern(pattern)}" disabled=${pattern === currentPattern}>
                 ${patternData[pattern].label}
               </button>
             `)

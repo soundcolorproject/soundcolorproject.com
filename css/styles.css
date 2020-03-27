@@ -127,10 +127,6 @@ button {
     display: inline-block;
 }
 
-button.selected {
-    background-color: #ddd;
-}
-
 button:hover {
     cursor: pointer;
     background-color: #b2b2b2;
