@@ -10,7 +10,6 @@ import { renderStateStore } from './renderStateStore.js'
 
 export class StateProvider extends Component {
   render (props) {
-    console.log('props', props);
     return html`
       <${Provider}
         analysis=${analysisStore}

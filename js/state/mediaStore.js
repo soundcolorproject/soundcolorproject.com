@@ -29,7 +29,6 @@ getUserMedia().then(() => {
 async function updateDevices() {
   const devices = await navigator.mediaDevices.enumerateDevices()
   mediaStore.possibleDevices = devices.filter(({ kind }) => kind === 'audioinput')
-  console.log('devices', devices)
 }
 
 navigator.mediaDevices.addEventListener('devicechange', updateDevices)

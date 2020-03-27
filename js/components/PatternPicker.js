@@ -10,7 +10,6 @@ export const PatternPicker = injectAndObserve(
   class PatternPicker extends Component {
     setPattern (pattern) {
       resume()
-      console.log('setPattern', pattern)
       this.props.patterns.currentPattern = pattern
     }
 
