@@ -6,7 +6,6 @@ import { hsvToHex, hsvToRgb, rgbToHsv } from '../color/colorHelpers.js'
 import { dBtoVolume } from '../audio/getAnalysis.js'
 
 const smoothValues = {
-  h: 0,
   s: 0,
   v: 0,
   r: 0,
@@ -34,10 +33,11 @@ function getColorsFromAnalysis(colorMap, { noise, tones }, { transitionSpeed, no
     hsv.v *= valueMult
 
     const rgb = hsvToRgb(hsv)
-    const r = smooth(rgb, 'r', delta, transitionSpeed)
-    const g = smooth(rgb, 'g', delta, transitionSpeed)
-    const b = smooth(rgb, 'b', delta, transitionSpeed)
-    const { h } = rgbToHsv({ r, g, b })
+    const { h } = rgbToHsv({
+      r: smooth(rgb, 'r', delta, transitionSpeed),
+      g: smooth(rgb, 'g', delta, transitionSpeed),
+      b: smooth(rgb, 'b', delta, transitionSpeed),
+    })
 
     return hsvToHex({
       h: h,
