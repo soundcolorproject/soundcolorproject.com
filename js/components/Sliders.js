@@ -19,9 +19,17 @@ export const Sliders = injectAndObserve(
       return this._setters[name]
     }
 
-    render ({ patterns: { noiseMultiplier, vibranceMultiplier, toneSigma, timeSmoothing } }) {
+    render ({ patterns: { transitionSpeed, noiseMultiplier, vibranceMultiplier, toneSigma, timeSmoothing } }) {
       return html`
         <div id="sliders">
+          <label>
+            Color Transition speed
+            <input
+              type="range" min="0.1" step="0.01" max="1"
+              value=${transitionSpeed}
+              oninput=${this.setValue('transitionSpeed')}
+            />
+          </label>
           <label>
             Brightness
             <input

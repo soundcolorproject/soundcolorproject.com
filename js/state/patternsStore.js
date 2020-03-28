@@ -54,6 +54,7 @@ function getCustomColors(name = 'current') {
 }
 
 export const patternsStore = observable({
+  transitionSpeed: 0.9,
   noiseMultiplier: 1,
   vibranceMultiplier: 2.5,
   toneSigma: 0,
