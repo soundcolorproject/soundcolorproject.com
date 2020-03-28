@@ -1,13 +1,12 @@
 
 import { context, resumePromise } from './context.js';
 
-let media
-let sourceId
-let source
+const userMediaMap = new Map()
+const audioSourceMap = new Map()
 
 export async function getUserMedia(deviceId = 'default') {
-  if (!media) {
-    media = await navigator.mediaDevices.getUserMedia({
+  if (!userMediaMap.has(deviceId)) {
+    const media = await navigator.mediaDevices.getUserMedia({
       audio: {
         deviceId: { exact: deviceId },
         echoCancellation: false,
@@ -15,27 +14,20 @@ export async function getUserMedia(deviceId = 'default') {
         noiseSuppression: false,
       }
     })
+    userMediaMap.set(deviceId, media)
   }
-  return media
+
+  return userMediaMap.get(deviceId)
 }
 
-const sources = new Map()
 
 export async function getAudioSource(deviceId = 'default') {
-  if (!source || deviceId != sourceId) {
-    source = (async () => {
-      sourceId = deviceId
-      if (sources.has(deviceId)) {
-        return sources.get(deviceId)
-      }
-      const stream = await getUserMedia(deviceId)
-      await resumePromise
-      const audioSource = context.createMediaStreamSource(stream)
-      sources.set(deviceId, audioSource)
-
-      return audioSource
-    })()
+  if (!audioSourceMap.has(deviceId)) {
+    const stream = await getUserMedia(deviceId)
+    await resumePromise
+    const audioSource = context.createMediaStreamSource(stream)
+    audioSourceMap.set(deviceId, audioSource)
   }
 
-  return source
+  return audioSourceMap.get(deviceId)
 }
