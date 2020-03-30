@@ -59,6 +59,7 @@ export const patternsStore = observable({
   vibranceMultiplier: 2.5,
   toneSigma: 0,
   timeSmoothing: 0.8,
+  monochrome: false,
   currentPattern: '',
   patternData: {
     chakras: {

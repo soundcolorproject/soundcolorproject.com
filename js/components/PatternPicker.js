@@ -1,5 +1,5 @@
 
-import { Component } from 'https://unpkg.com/preact?module'
+import { Component, Fragment } from 'https://unpkg.com/preact?module'
 import { html } from '../html.js'
 import { injectAndObserve } from '../state/injectAndObserve.js'
 import { resume } from '../audio/context.js'
@@ -36,19 +36,29 @@ export const PatternPicker = injectAndObserve(
     }
 
     render ({ patterns }) {
-      const { currentPattern, patternData } = patterns
+      const { currentPattern, patternData, monochrome } = patterns
       const possiblePatterns = Object.keys(patternData)
       return html`
-        <div>
-          ${
-            possiblePatterns.map(pattern => html`
-              <button type="button" onclick="${() => this.setPattern(pattern)}" disabled=${pattern === currentPattern}>
-                ${patternData[pattern].label}
-              </button>
-            `)
-          }
-          ${this.renderCustomButtons()}
-        </div>
+        <${Fragment}>
+          <div>
+            ${
+              possiblePatterns.map(pattern => html`
+                <button type="button" onclick="${() => this.setPattern(pattern)}" disabled=${pattern === currentPattern}>
+                  ${patternData[pattern].label}
+                </button>
+              `)
+            }
+            ${this.renderCustomButtons()}
+          </div>
+          <label>
+              <input
+                type="checkbox"
+                checked=${monochrome}
+                onchange=${() => patterns.monochrome = !monochrome}
+              />
+              Monochromatic
+          </label>
+        </${Fragment}>
       `
     }
   },

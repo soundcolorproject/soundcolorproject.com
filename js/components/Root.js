@@ -24,10 +24,6 @@ export const Root = injectAndObserve(
               <h1>SoundColor</h1>
               <p>Select a color pattern:</p>
               <${PatternPicker}/>
-              <label>
-                  <input type="checkbox" />
-                  Monochromatic
-              </label>
               <${SoundDetails}/>
               <${MiniAnalyser}/>
               <div id='spreader'/>

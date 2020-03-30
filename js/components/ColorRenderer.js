@@ -19,7 +19,7 @@ function smooth (color, key, delta, speed) {
 }
 
 let lastTime = Date.now()
-function getColorsFromAnalysis(colorMap, { noise, tones }, { transitionSpeed, noiseMultiplier, vibranceMultiplier }) {
+function getColorsFromAnalysis(colorMap, { noise, tones }, { transitionSpeed, noiseMultiplier, vibranceMultiplier, monochrome }) {
   noiseMultiplier = noiseMultiplier >= 0 ? 2 ** noiseMultiplier : 0
   vibranceMultiplier = 2 ** vibranceMultiplier
   const saturationMult = Math.max(0, Math.min(1 - (dBtoVolume(noise) * noiseMultiplier), 1))
@@ -41,7 +41,7 @@ function getColorsFromAnalysis(colorMap, { noise, tones }, { transitionSpeed, no
 
     return hsvToHex({
       h: h,
-      s: smooth(hsv, 's', delta, transitionSpeed),
+      s: monochrome ? 0 : smooth(hsv, 's', delta, transitionSpeed),
       v: smooth(hsv, 'v', delta, transitionSpeed),
     })
   })
