@@ -15,13 +15,8 @@ const setAnalysis = action('setAnalysis', ({ noise, tones }, miniFft) => {
   analysisStore.miniFft = miniFft
 })
 
-function sleep(time) {
-  return new Promise(resolve => setTimeout(resolve, time))
-}
-
 async function requestAnalysis() {
   setAnalysis(getAnalysis(), getMiniFft())
-  // await sleep(100)
   requestAnimationFrame(requestAnalysis)
 }
 

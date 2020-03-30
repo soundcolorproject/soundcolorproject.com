@@ -58,45 +58,6 @@ function getStats(fft) {
   }
 }
 
-// function getStats(fft) {
-//   const volumes = fft.map(dBtoVolume)
-//   const meanStats = volumes.reduce((val, curr, idx) => {
-//     if (curr > MIN_FOR_STATS) {
-//       val.total += curr
-//       val.count++
-//     }
-//     return val
-//   }, { total: 0, count: 0 })
-//   if (meanStats.count === 0) {
-//     return DEFAULT_STATS
-//   }
-//   const mean = meanStats.total / meanStats.count
-
-//   const varianceStats = volumes.reduce((val, curr, idx) => {
-//     if (curr > MIN_FOR_STATS) {
-//       val.total += (curr - mean) ** 2
-//       val.count**
-//     }
-//     return val
-//   }, { total: 0, count: 0 })
-//   const deviation = Math.sqrt(varianceStats.total / varianceStats.count)
-
-//   const meandB = volumeTodB(mean)
-//   const deviationdB = Math.abs(volumeTodB(mean + deviation) - meandB)
-
-//   return {
-//     dB: {
-//       mean: meandB,
-//       deviation: deviationdB,
-//     },
-//     volume: {
-//       mean: mean,
-//       deviation: deviation,
-//     },
-//     counted: meanStats.count,
-//   }
-// }
-
 function getStrongestValues(fft, minToCount) {
   const strongest = []
   function addIfHigher(value, idx) {
@@ -177,7 +138,6 @@ export function volumeTodB(volume) {
 export function getAnalysis() {
   const fft = getFft()
   const stats = getStats(fft)
-  // const mindB = volumeTodB(stats.volume.mean + stats.volume.deviation * patternsStore.toneSigma)
   const mindB = stats.dB.mean + stats.dB.deviation * patternsStore.toneSigma
   const strongest = getStrongestValues(fft, mindB)
   const tones = getTones(strongest)

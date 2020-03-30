@@ -11,13 +11,15 @@ export const mediaStore = observable({
   currentDeviceId: 'default',
 })
 
+async function setDevice (newDeviceId) {
+  const newAudioSource = await getAudioSource(newDeviceId)
+  setSource1(newAudioSource)
+  setSource2(newAudioSource)
+}
+
 reaction(
   () => mediaStore.currentDeviceId,
-  async (newDeviceId) => {
-    const newAudioSource = await getAudioSource(newDeviceId)
-    setSource1(newAudioSource)
-    setSource2(newAudioSource)
-  }
+  setDevice,
 )
 
 getUserMedia().then(() => {
@@ -28,7 +30,14 @@ getUserMedia().then(() => {
 
 async function updateDevices() {
   const devices = await navigator.mediaDevices.enumerateDevices()
-  mediaStore.possibleDevices = devices.filter(({ kind }) => kind === 'audioinput')
+  const possibleDevices = devices.filter(({ kind }) => kind === 'audioinput')
+  mediaStore.possibleDevices = possibleDevices
+  const currentDeviceId = mediaStore.currentDeviceId
+  if (!possibleDevices.some(({ deviceId }) => deviceId === currentDeviceId)) {
+    mediaStore.currentDeviceId = 'default'
+  } else {
+    setDevice(mediaStore.currentDeviceId)
+  }
 }
 
 navigator.mediaDevices.addEventListener('devicechange', updateDevices)
