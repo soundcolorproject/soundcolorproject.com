@@ -8,7 +8,9 @@ const BASE = 1.5
 export const MiniAnalyser = injectAndObserve(
   ({ analysis }) => ({ analysis }),
   class MiniAnalyser extends Component {
-    render ({ analysis: { miniFft } }) {
+    render ({ analysis }) {
+      analysis.tones // required in order to force-re-render on update
+      const { miniFft } = analysis
       const heights = [...miniFft].map(dB => (BASE ** (dB / 10)) * 100)
       return html`
         <div id="mini-analyser">
