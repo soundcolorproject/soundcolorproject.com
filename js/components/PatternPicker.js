@@ -50,7 +50,7 @@ export const PatternPicker = injectAndObserve(
             }
             ${this.renderCustomButtons()}
           </div>
-          <label>
+          <label id="monochromatic">
               <input
                 type="checkbox"
                 checked=${monochrome}

@@ -6,18 +6,17 @@ export class Shortcuts extends Component {
   render () {
     return html`
       <div id="shortcuts">
-        <h2>
-          Keyboard shortcuts
-        </h2>
-        <ul>
-          <li><span>'space'</span> = show/hide details</li>
-          <li><span>'enter'</span> = stop/start color pattern</li>
+        <div>
+          <p><span>'space'</span> = show/hide details</p><button aria-label="Hide page details">Hide Details</button>
+        </div>
+        <div>
+          <p><span>'enter'</span> = stop/start color pattern</p><button aria-label="Stop the color pattern">Stop Color Pattern</button>
+        </div>
           ${
-            document.fullscreenEnabled 
-              ? html`<li><span>'F'</span> = enter/leave fullscreen</li>` 
+            document.fullscreenEnabled
+              ? html`<p><span>'f'</span> = enter/leave fullscreen</p><button aria-label="Enter fullscreen mode">Enter Fullscreen</button>`
               : ''
           }
-        </ul>
       </div>
     `
   }

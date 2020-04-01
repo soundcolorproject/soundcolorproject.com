@@ -23,7 +23,7 @@ export const Sliders = injectAndObserve(
       return html`
         <div id="sliders">
           <label>
-            Color Transition speed
+            Color Transition Speed
             <input
               type="range" min="0.1" step="0.01" max="1"
               value=${transitionSpeed}
@@ -39,7 +39,7 @@ export const Sliders = injectAndObserve(
             />
           </label>
           <label>
-            Noise desaturation
+            Noise Desaturation
             <input
               type="range" min="-0.01" step="0.01" max="10"
               value=${noiseMultiplier}
@@ -55,7 +55,7 @@ export const Sliders = injectAndObserve(
             />
           </label> -->
           <label>
-            Time smoothing
+            Time Smoothing
             <input
               type="range" min="0" step="0.01" max="0.99"
               value=${timeSmoothing}

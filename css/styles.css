@@ -54,6 +54,15 @@ body {
     position: relative;
 }
 
+#monochromatic {
+    margin: 16px 0 8px;
+    cursor: pointer;
+}
+
+#monochromatic input {
+    margin-right: 4px;
+}
+
 #spreader {
     flex-grow: 1;
     display: flex;
@@ -70,6 +79,7 @@ body {
 #footer > .footer-item {
     flex-grow: 1;
     flex-basis: 250px;
+    margin: 16px 0 8px;
 }
 
 #mini-analyser {
@@ -90,7 +100,7 @@ body {
 #mini-analyser > .bar {
     background: rgba(128, 128, 128, 0.75);
     flex-grow: 1;
-    
+
 }
 
 h1 {
@@ -177,7 +187,15 @@ button:disabled, button:disabled:hover, button:disabled:active {
 label, input {
     font-weight: 600;
     font-size: 11px;
-    cursor: pointer;
+}
+
+#shortcuts button {
+    padding: 4px;
+}
+
+#shortcuts p {
+    display: inline-block;
+    margin-right: 8px;
 }
 
 #info-body {
@@ -243,4 +261,13 @@ input[type=range]:focus {
 #sliders > label {
     display: flex;
     flex-direction: column;
+    margin-bottom: 8px;
+}
+
+#sliders input {
+    cursor: grab;
+}
+
+#sliders input:active {
+    cursor: grabbing;
 }
